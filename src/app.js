@@ -1,3 +1,7 @@
+var React = require('react');
+var ReactDOM = require('react-dom');
+var $ = require('jquery');
+
 var WeaponsFilter = React.createClass({
     render: function() {
         return (
@@ -6,7 +10,7 @@ var WeaponsFilter = React.createClass({
             </div>
         );
     }
-})
+});
 
 var weaponAttributes = [
     '_id',
