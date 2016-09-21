@@ -17,13 +17,18 @@ function scripts(watch) {
 
     b.on('update', makeBundle);
 
-    function makeBundle () {
-      b.transform('babelify', {
-              presets: 'react'
-          })
-          .bundle()
-          .pipe(source('bundle.js'))
-          .pipe(gulp.dest('static/'));
+    function makeBundle() {
+        b.transform('babelify', {
+                presets: 'react'
+            })
+            .bundle()
+            .on('error', function(err) {
+                console.error(err.message);
+                console.error(err.codeFrame);
+            })
+            .pipe(source('bundle.js'))
+            .pipe(gulp.dest('static/'));
+        console.log('Bundle updated');
     }
 
     makeBundle();
@@ -35,6 +40,7 @@ gulp.task('bundle', function() {
 });
 
 gulp.task('watch', function() {
-
-return scripts(true);
+    return scripts(true);
 });
+
+gulp.task('default', ['watch']);
