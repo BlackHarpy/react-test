@@ -9,7 +9,7 @@ function scripts(watch) {
         plugins.push('watchify');
     }
     var b = browserify({
-        entries: ['src/app.js'],
+        entries: ['src/App.jsx'],
         cache: {},
         packageCache: {},
         plugin: plugins

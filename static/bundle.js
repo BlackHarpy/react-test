@@ -30696,51 +30696,39 @@ module.exports = require('./lib/React');
 },{"./lib/React":55}],173:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
-var $ = require('jquery');
 
-var WeaponsFilter = React.createClass({
-    displayName: 'WeaponsFilter',
+var WeaponList = require('./WeaponList.jsx');
 
-    render: function () {
-        return React.createElement('div', { className: 'weaponFilter' }, 'Weapons filtering');
-    }
-});
+ReactDOM.render(React.createElement(WeaponList, null), document.getElementById('main'));
 
-var weaponAttributes = ['_id', 'name', 'type', 'damage', 'speed', 'weight', 'thacoMod', 'special'];
-
-var WeaponRow = React.createClass({
-    displayName: 'WeaponRow',
-
-    generateRowData: function () {
-        var weapon = this.props.weapon;
-        var keys = this.props.weaponsAttributes;
-
-        return keys.map(function (key, i) {
-            return React.createElement('td', { key: i }, weapon[key]);
-        });
-    },
-    render: function () {
-        var row = this.generateRowData();
-        return React.createElement('tr', null, row);
-    }
-});
-
-var WeaponTable = React.createClass({
-    displayName: 'WeaponTable',
-
-    render: function () {
-        var weaponsRows = this.props.weapons.map(function (weapon) {
-            return React.createElement(WeaponRow, { key: weapon._id, weapon: weapon, weaponsAttributes: weaponAttributes });
-        });
-        return React.createElement('div', { className: 'WeaponTable' }, React.createElement('table', null, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, 'Id'), React.createElement('th', null, 'Name'), React.createElement('th', null, 'Type'), React.createElement('th', null, 'Damage'), React.createElement('th', null, 'Speed'), React.createElement('th', null, 'Weight'), React.createElement('th', null, 'THACO Mod'), React.createElement('th', null, 'Special'))), React.createElement('tbody', null, weaponsRows)));
-    }
-});
+},{"./WeaponList.jsx":176,"react":172,"react-dom":29}],174:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var WeaponAdd = React.createClass({
     displayName: 'WeaponAdd',
 
     render: function () {
-        return React.createElement('div', { className: 'weaponAdd' }, React.createElement('form', { name: 'weaponForm' }, React.createElement('input', { type: 'text', name: 'name', placeholder: 'Name' }), React.createElement('input', { type: 'text', name: 'type', placeholder: 'Type' }), React.createElement('input', { type: 'text', name: 'damage', placeholder: 'Damage' }), React.createElement('input', { type: 'number', name: 'speed', placeholder: 'Speed' }), React.createElement('input', { type: 'number', name: 'weight', placeholder: 'Weght' }), React.createElement('input', { type: 'number', name: 'thaco', placeholder: 'THACO Modifier' }), React.createElement('input', { type: 'text', name: 'special', placeholder: 'Special' }), React.createElement('button', { onClick: this.handleSummit }, 'Add Weapon')));
+        return React.createElement(
+            'div',
+            { className: 'weaponAdd' },
+            React.createElement(
+                'form',
+                { name: 'weaponForm' },
+                React.createElement('input', { type: 'text', name: 'name', placeholder: 'Name' }),
+                React.createElement('input', { type: 'text', name: 'type', placeholder: 'Type' }),
+                React.createElement('input', { type: 'text', name: 'damage', placeholder: 'Damage' }),
+                React.createElement('input', { type: 'number', name: 'speed', placeholder: 'Speed' }),
+                React.createElement('input', { type: 'number', name: 'weight', placeholder: 'Weght' }),
+                React.createElement('input', { type: 'number', name: 'thaco', placeholder: 'THACO Modifier' }),
+                React.createElement('input', { type: 'text', name: 'special', placeholder: 'Special' }),
+                React.createElement(
+                    'button',
+                    { onClick: this.handleSummit },
+                    'Add Weapon'
+                )
+            )
+        );
     },
     handleSummit: function (e) {
         e.preventDefault();
@@ -30757,8 +30745,38 @@ var WeaponAdd = React.createClass({
     }
 });
 
-var WeaponsList = React.createClass({
-    displayName: 'WeaponsList',
+module.exports = WeaponAdd;
+
+},{"react":172,"react-dom":29}],175:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var WeaponFilter = React.createClass({
+    displayName: 'WeaponFilter',
+
+    render: function () {
+        return React.createElement(
+            'div',
+            { className: 'weaponFilter' },
+            'Weapons filtering'
+        );
+    }
+});
+
+module.exports = WeaponFilter;
+
+},{"react":172,"react-dom":29}],176:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
+var $ = require('jquery');
+
+var WeaponFilter = require('./WeaponFilter.jsx');
+var WeaponAdd = require('./WeaponAdd.jsx');
+
+var weaponAttributes = ['_id', 'name', 'type', 'damage', 'speed', 'weight', 'thacoMod', 'special'];
+
+var WeaponList = React.createClass({
+    displayName: 'WeaponList',
 
     getInitialState: function () {
         return { weapons: [] };
@@ -30769,7 +30787,14 @@ var WeaponsList = React.createClass({
         }.bind(this));
     },
     render: function () {
-        return React.createElement('div', { className: 'weaponList' }, React.createElement(WeaponsFilter, null), React.createElement(WeaponTable, { weapons: this.state.weapons }), React.createElement('hr', null), React.createElement(WeaponAdd, { addWeapon: this.addWeapon }));
+        return React.createElement(
+            'div',
+            { className: 'weaponList' },
+            React.createElement(WeaponFilter, null),
+            React.createElement(WeaponTable, { weapons: this.state.weapons }),
+            React.createElement('hr', null),
+            React.createElement(WeaponAdd, { addWeapon: this.addWeapon })
+        );
     },
     addWeapon: function (weapon) {
         $.ajax({
@@ -30789,6 +30814,102 @@ var WeaponsList = React.createClass({
     }
 });
 
-ReactDOM.render(React.createElement(WeaponsList, null), document.getElementById('main'));
+var WeaponRow = React.createClass({
+    displayName: 'WeaponRow',
 
-},{"jquery":26,"react":172,"react-dom":29}]},{},[173]);
+    generateRowData: function () {
+        var weapon = this.props.weapon;
+        var keys = this.props.weaponsAttributes;
+
+        return keys.map(function (key, i) {
+            return React.createElement(
+                'td',
+                { key: i },
+                weapon[key]
+            );
+        });
+    },
+    render: function () {
+        var row = this.generateRowData();
+        return React.createElement(
+            'tr',
+            null,
+            row
+        );
+    }
+});
+
+var WeaponTable = React.createClass({
+    displayName: 'WeaponTable',
+
+    render: function () {
+        var weaponsRows = this.props.weapons.map(function (weapon) {
+            return React.createElement(WeaponRow, { key: weapon._id, weapon: weapon, weaponsAttributes: weaponAttributes });
+        });
+        return React.createElement(
+            'div',
+            { className: 'WeaponTable' },
+            React.createElement(
+                'table',
+                null,
+                React.createElement(
+                    'thead',
+                    null,
+                    React.createElement(
+                        'tr',
+                        null,
+                        React.createElement(
+                            'th',
+                            null,
+                            'Id'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Name'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Type'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Damage'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Speed'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Weight'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'THACO Mod'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Special'
+                        )
+                    )
+                ),
+                React.createElement(
+                    'tbody',
+                    null,
+                    weaponsRows
+                )
+            )
+        );
+    }
+});
+
+module.exports = WeaponList;
+
+},{"./WeaponAdd.jsx":174,"./WeaponFilter.jsx":175,"jquery":26,"react":172,"react-dom":29}]},{},[173]);
