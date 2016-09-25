@@ -30704,50 +30704,53 @@ ReactDOM.render(React.createElement(WeaponList, null), document.getElementById('
 },{"./WeaponList.jsx":176,"react":172,"react-dom":29}],174:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
+var $ = require('jquery');
+
+var WeaponTypeSelect = React.createClass({
+  displayName: 'WeaponTypeSelect',
+
+  getInitialState: function () {
+    return { options: [] };
+  },
+  componentDidMount: function () {
+    console.log('holaaaa');
+    $.ajax('/api/system/WEAPONS_TYPES').done(function (data) {
+      var optionsList = [];
+      for (var i = 0; i < data.values.length; i++) {
+        optionsList.push(React.createElement('option', { key: i, value: data.values[i] }, data.values[i]));
+      }
+      this.setState({ options: optionsList });
+    }.bind(this));
+  },
+  render: function () {
+    return React.createElement('select', { name: 'type', placeholder: 'Type' }, this.state.options);
+  }
+});
 
 var WeaponAdd = React.createClass({
-    displayName: 'WeaponAdd',
+  displayName: 'WeaponAdd',
 
-    render: function () {
-        return React.createElement(
-            'div',
-            { className: 'weaponAdd' },
-            React.createElement(
-                'form',
-                { name: 'weaponForm' },
-                React.createElement('input', { type: 'text', name: 'name', placeholder: 'Name' }),
-                React.createElement('input', { type: 'text', name: 'type', placeholder: 'Type' }),
-                React.createElement('input', { type: 'text', name: 'damage', placeholder: 'Damage' }),
-                React.createElement('input', { type: 'number', name: 'speed', placeholder: 'Speed' }),
-                React.createElement('input', { type: 'number', name: 'weight', placeholder: 'Weght' }),
-                React.createElement('input', { type: 'number', name: 'thaco', placeholder: 'THACO Modifier' }),
-                React.createElement('input', { type: 'text', name: 'special', placeholder: 'Special' }),
-                React.createElement(
-                    'button',
-                    { onClick: this.handleSummit },
-                    'Add Weapon'
-                )
-            )
-        );
-    },
-    handleSummit: function (e) {
-        e.preventDefault();
-        var form = document.forms.weaponForm;
-        this.props.addWeapon({
-            name: form.name.value,
-            type: form.type.value,
-            damage: form.damage.value,
-            speed: form.speed.value,
-            weight: form.weight.value,
-            thaco: form.thaco.value,
-            special: form.special.value
-        });
-    }
+  render: function () {
+    return React.createElement('div', { className: 'weaponAdd' }, React.createElement('form', { name: 'weaponForm' }, React.createElement('input', { type: 'text', name: 'name', placeholder: 'Name' }), React.createElement(WeaponTypeSelect, null), React.createElement('input', { type: 'text', name: 'damage', placeholder: 'Damage' }), React.createElement('input', { type: 'number', name: 'speed', placeholder: 'Speed' }), React.createElement('input', { type: 'number', name: 'weight', placeholder: 'Weght' }), React.createElement('input', { type: 'number', name: 'thaco', placeholder: 'THACO Modifier' }), React.createElement('input', { type: 'text', name: 'special', placeholder: 'Special' }), React.createElement('button', { onClick: this.handleSummit }, 'Add Weapon')));
+  },
+  handleSummit: function (e) {
+    e.preventDefault();
+    var form = document.forms.weaponForm;
+    this.props.addWeapon({
+      name: form.name.value,
+      type: form.type.value,
+      damage: form.damage.value,
+      speed: form.speed.value,
+      weight: form.weight.value,
+      thaco: form.thaco.value,
+      special: form.special.value
+    });
+  }
 });
 
 module.exports = WeaponAdd;
 
-},{"react":172,"react-dom":29}],175:[function(require,module,exports){
+},{"jquery":26,"react":172,"react-dom":29}],175:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
 

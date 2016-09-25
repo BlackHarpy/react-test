@@ -1,5 +1,27 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var $ = require('jquery');
+
+var WeaponTypeSelect = React.createClass({
+  getInitialState: function() {
+    return { options: [] };
+  },
+  componentDidMount: function () {
+    console.log('holaaaa');
+    $.ajax( '/api/system/WEAPONS_TYPES').done(function (data) {
+      var optionsList = [];
+      for (var i = 0; i < data.values.length; i++) {
+          optionsList.push(
+               <option key={i} value={data.values[i]}>{data.values[i]}</option>
+           );
+       }
+       this.setState({ options: optionsList });
+    }.bind(this));
+  },
+  render: function() {
+       return <select name="type" placeholder="Type">{this.state.options}</select>
+   }
+});
 
 var WeaponAdd = React.createClass({
     render: function() {
@@ -7,7 +29,7 @@ var WeaponAdd = React.createClass({
             <div className="weaponAdd">
                 <form name='weaponForm'>
                   <input type='text' name='name' placeholder="Name" />
-                  <input type='text' name='type' placeholder="Type" />
+                  <WeaponTypeSelect />
                   <input type='text' name='damage' placeholder="Damage" />
                   <input type='number' name='speed' placeholder="Speed" />
                   <input type='number' name='weight' placeholder="Weght" />
