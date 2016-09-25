@@ -6,20 +6,8 @@ var WeaponTypeSelect = React.createClass({
   getInitialState: function() {
     return { options: [] };
   },
-  componentDidMount: function () {
-    console.log('holaaaa');
-    $.ajax( '/api/system/WEAPONS_TYPES').done(function (data) {
-      var optionsList = [];
-      for (var i = 0; i < data.values.length; i++) {
-          optionsList.push(
-               <option key={i} value={data.values[i]}>{data.values[i]}</option>
-           );
-       }
-       this.setState({ options: optionsList });
-    }.bind(this));
-  },
   render: function() {
-       return <select name="type" placeholder="Type">{this.state.options}</select>
+       return <select name="type" placeholder="Type">{this.props.options}</select>
    }
 });
 
@@ -28,13 +16,13 @@ var WeaponAdd = React.createClass({
         return (
             <div className="weaponAdd">
                 <form name='weaponForm'>
-                  <input type='text' name='name' placeholder="Name" />
-                  <WeaponTypeSelect />
-                  <input type='text' name='damage' placeholder="Damage" />
-                  <input type='number' name='speed' placeholder="Speed" />
-                  <input type='number' name='weight' placeholder="Weght" />
-                  <input type='number' name='thaco' placeholder="THACO Modifier" />
-                  <input type='text' name='special' placeholder="Special" />
+                  <input type="text" name='name' placeholder="Name" />
+                  <WeaponTypeSelect options={this.props.weaponsTypes}/>
+                  <input type="text" name="damage" placeholder="Damage" />
+                  <input type="number" name="speed" placeholder="Speed" />
+                  <input type="number" name="weight" placeholder="Weght" />
+                  <input type="number" name="thaco" placeholder="THACO Modifier" />
+                  <input type="text" name="special" placeholder="Special" />
                   <button onClick={this.handleSummit}>Add Weapon</button>
                 </form>
             </div>

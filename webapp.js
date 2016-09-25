@@ -12,7 +12,11 @@ app.use(express.static('static'));
 app.use(bodyParser.json());
 
 app.get('/api/weapons', function(req,res) {
-  Weapon.find(function(err, weaponsList) {
+  var filter = {};
+  if (req.query.type) {
+    filter.type = req.query.type;
+  }
+  Weapon.find(filter,function(err, weaponsList) {
     if(err) res.send(500, err.message);
     res.json(weaponsList);
   });

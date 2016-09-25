@@ -21,17 +21,30 @@ var WeaponList = React.createClass({
         return {weapons: []};
     },
     componentDidMount: function() {
-      $.ajax('/api/weapons').done(function(data) {
+      this.loadData({})
+
+      $.ajax( '/api/system/WEAPONS_TYPES').done(function (data) {
+        var optionsList = [];
+        for (var i = 0; i < data.values.length; i++) {
+            optionsList.push(
+                 <option key={i} value={data.values[i]}>{data.values[i]}</option>
+             );
+         }
+         this.setState({ weaponsTypes: optionsList });
+      }.bind(this));
+    },
+    loadData: function(filter) {
+      $.ajax('/api/weapons',{data: filter}).done(function(data) {
         this.setState({weapons: data});
       }.bind(this));
     },
     render: function() {
         return (
             <div className="weaponList">
-                <WeaponFilter/>
+                <WeaponFilter weaponsTypes={this.state.weaponsTypes} submitHandler={this.loadData}/>
                 <WeaponTable weapons={this.state.weapons}/>
                 <hr/>
-                <WeaponAdd addWeapon={this.addWeapon}/>
+                <WeaponAdd addWeapon={this.addWeapon} weaponsTypes={this.state.weaponsTypes}/>
             </div>
         );
     },
